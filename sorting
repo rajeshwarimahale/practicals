@@ -1,0 +1,137 @@
+#include <stdio.h>
+
+void insertionSort(int arr[], int n) {
+    int i, key, j;
+    for (i = 1; i < n; i++) {
+        key = arr[i];
+        j = i - 1;
+
+
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+void merge(int arr[], int left, int mid, int right) {
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+    int L[n1], R[n2];
+
+    for (int i = 0; i < n1; i++) {
+        L[i] = arr[left + i];
+    }
+    for (int j = 0; j < n2; j++) {
+        R[j] = arr[mid + 1 + j];
+    }
+
+    int i = 0, j = 0, k = left;
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        } else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+
+    while (i < n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+    while (j < n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+}
+
+void mergeSort(int arr[], int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+        merge(arr, left, mid, right);
+    }
+}
+
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; j++) {
+        if (arr[j] <= pivot) {
+            i++;
+
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    }
+
+    int temp = arr[i + 1];
+    arr[i + 1] = arr[high];
+    arr[high] = temp;
+
+    return i + 1;
+}
+
+void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int arr1[] = {12, 11, 13, 5, 6};
+    int n1 = sizeof(arr1) / sizeof(arr1[0]);
+
+    printf("Original Array for Sorting Algorithms: \n");
+    printArray(arr1, n1);
+
+
+    int arr2[n1];
+    for (int i = 0; i < n1; i++) {
+        arr2[i] = arr1[i];
+    }
+    insertionSort(arr2, n1);
+    printf("Array after Insertion Sort: \n");
+    printArray(arr2, n1);
+
+
+    int arr3[n1];
+    for (int i = 0; i < n1; i++) {
+        arr3[i] = arr1[i];
+    }
+    mergeSort(arr3, 0, n1 - 1);
+    printf("Array after Merge Sort: \n");
+    printArray(arr3, n1);
+
+
+    int arr4[n1];
+    for (int i = 0; i < n1; i++) {
+        arr4[i] = arr1[i];
+    }
+    quickSort(arr4, 0, n1 - 1);
+    printf("Array after Quick Sort: \n");
+    printArray(arr4, n1);
+
+    return 0;
+}
